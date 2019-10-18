@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:07:39 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/17 17:13:52 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/18 19:34:29 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ t_list *ft_get_point(char *value, int x, int y)
 		ft_putstr("error\n");
 	h = ft_atoi(value);
 	point->h = h;
-	point->x = x;
-	point->y = y;
+	point->x = (x - y)*DELTA;
+	point->y = (y + x)*DELTA;
 	tmp = ft_lstnew(point, sizeof(t_point));
 	free(point);
-//	printf("create point with height: %d, x: %d, y: %d\n", ((t_point*)(tmp->content))->height, ((t_point*)(tmp->content))->x, ((t_point*)(tmp->content))->y);
 	return(tmp);
 }
 
@@ -47,14 +46,11 @@ void ft_form_list(t_list **begin, char *line, int line_num)
 	str = ft_strsplit(line, ' ');
 	while (str[i])
 	{
-		printf("iteration: %d\n", i);
 		ttmp = ft_get_point(str[i], line_num, i);
-//		printf("create point with height: %d\n", ((t_point*)(ttmp->content))->height);
 		if (tmp)
 		{
 			tmp->next = ttmp;
 			tmp = tmp->next;
-//			printf("create point with height: %d\n", ((t_point*)(tmp->content))->height);
 		}
 		else
 		{
@@ -63,6 +59,7 @@ void ft_form_list(t_list **begin, char *line, int line_num)
 		}
 		i++;
 	}
+	//здесь надо истить указатели
 }
 
 t_list	*ft_read_file(int fd)
@@ -76,7 +73,6 @@ t_list	*ft_read_file(int fd)
 	lst = NULL;
 	while ((ret = get_next_line(fd, &line)))
 	{
-		printf("line read #%d\n", line_num);
 		ft_form_list(&lst, line, line_num);
 		free(line);
 		line = NULL;
