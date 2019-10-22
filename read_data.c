@@ -6,14 +6,14 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:07:39 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/18 19:34:29 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/22 22:25:48 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
 #include <stdio.h>
-t_list *ft_get_point(char *value, int x, int y)
+t_list *ft_get_point(char *value, int j, int i)
 {
 	//оптимизировать - не искать каждвый раз конец списка перебирая сначала
 	t_list *tmp;
@@ -21,12 +21,18 @@ t_list *ft_get_point(char *value, int x, int y)
 	t_point *point;
 
 	if (!(point = (t_point*)malloc(sizeof(t_point))))
-		ft_putstr("error\n");
+		ft_error();
 	h = ft_atoi(value);
 	point->h = h;
-	point->x = (x - y)*DELTA;
-	point->y = (y + x)*DELTA;
-	tmp = ft_lstnew(point, sizeof(t_point));
+//	point->x = (x - y)*DELTA;
+//	point->y = (y + x)*DELTA;
+	point->x = i*DELTA;
+	point->y = j*DELTA;
+	point->line = j;
+	//применяем изометрию
+	ft_iso(&(point->x), &(point->y), h);
+	if (!(tmp = ft_lstnew(point, sizeof(t_point))))
+		ft_error();
 	free(point);
 	return(tmp);
 }
@@ -44,6 +50,8 @@ void ft_form_list(t_list **begin, char *line, int line_num)
 		while (tmp->next)
 			tmp = tmp->next;
 	str = ft_strsplit(line, ' ');
+	if (str == NULL)
+		ft_error();
 	while (str[i])
 	{
 		ttmp = ft_get_point(str[i], line_num, i);
@@ -71,7 +79,7 @@ t_list	*ft_read_file(int fd)
 
 	line_num = 0;
 	lst = NULL;
-	while ((ret = get_next_line(fd, &line)))
+	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		ft_form_list(&lst, line, line_num);
 		free(line);
@@ -79,6 +87,6 @@ t_list	*ft_read_file(int fd)
 		line_num++;
 	}
 	if (ret == -1)
-		ft_putstr("error\n");
+		ft_error();
 	return (lst);
 }

@@ -6,15 +6,30 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:03:35 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/19 17:20:14 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/22 22:25:45 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
 #include <mlx.h>
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+//здесь z равен одному шагу т.к.  работаем с квадратом
+void ft_iso(int *x, int *y, int z)
+{
+	int x_prev;
+	int y_prev;
+	
+	x_prev = *x;
+	y_prev = *y;
+
+	*x = (x_prev - y_prev) * cos(0.523599);
+	*y = -z + (x_prev + y_prev) * sin(0.523599);
+}
+
+
 void ft_bresenham(t_param *param, t_point p0, t_point p1)
 {
 	t_point	tmp;
@@ -23,10 +38,10 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 	int y;
 	int error;
 	
-	printf("start drawing\n");
 	x = p0.x;
 	y = p0.y;
 	error = 0;
+	//sign
 	step.x = (p0.x < p1.x) ? 1 : -1;
 	step.y = (p0.y < p1.y) ? 1 : -1;
 	//deltax
@@ -37,7 +52,7 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 	tmp.h = tmp.x - tmp.y;
 	while (x != p1.x || y != p1.y)
 	{
-		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x + WIDTH / 2, (y + HEIGHT / 2) / V_ANGLE, 0x000FFFFFF);
+		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x + WIDTH / 2, y + HEIGHT / 2, 0x000FFFFFF);
 		if ((error = tmp.h * 2) > -tmp.y)
 		{
 			tmp.h -= tmp.y;
@@ -48,33 +63,50 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 			tmp.y += tmp.x;
 			y = y + step.y;
 		}
+		printf("x0: %d, y0: %d, x1: %d, y1: %d, x = %d, y = %d\n", p0.x, p0.y, p1.x, p1.y, x, y);
 	}
 }
 
 void ft_render(t_list *map)
 {
-	t_param *param;
+	t_param param;
 	t_list *tmp;
-	t_point p0;
-	t_point p1;
+	t_point p00;
+	t_point p01;
+	//указатели идущие на строчку назад
+	t_list *ttmp;
+	t_point p10;
+	t_point p11;
 
-	printf("check reader 0\n");
-	param = NULL;
-	param->mlx_ptr = mlx_init();
-	printf("check render 1\n");
-	param->win_ptr = mlx_new_window(param->mlx_ptr, WIDTH, HEIGHT, "fdf");
-	printf("check render 2\n");
-	mlx_key_hook(param->win_ptr, ft_deal_key, (void *)0); 
+	param.mlx_ptr = mlx_init();
+	param.win_ptr = mlx_new_window(param.mlx_ptr, WIDTH, HEIGHT, "fdf");
+	mlx_key_hook(param.win_ptr, ft_deal_key, (void *)0); 
 	
-	printf("check reader 3\n");
 	tmp = map;
+	ttmp = tmp;
+	//не рисует последний элемент
+	//не работает если в строке 1 элемент
 	while (tmp && tmp->next)
 	{
-		p1 = *(t_point*)(tmp->next->content);
-		p0 = *(t_point*)(tmp->content);
-		ft_bresenham(param, p0, p1);
+		p01 = *(t_point*)(tmp->next->content);
+		p00 = *(t_point*)(tmp->content);
+		if (p00.line == p01.line)
+			ft_bresenham(&param, p00, p01);
+	//	if (p00.x == 0)
+	//		ttmp = tmp;
+	//второй указатель стоит пока первый проходит первую линию
+		if (ttmp->next && p00.line != 0)
+		{
+			p11 = *(t_point*)(ttmp->next->content);
+			p10 = *(t_point*)(ttmp->content);
+			if(p11.line == p10.line)
+			{
+				ft_bresenham(&param, p11, p01);
+				ft_bresenham(&param, p10, p00);
+			}
+			ttmp = ttmp->next;
+		}
 		tmp = tmp->next;
-	}
-	
-	mlx_loop(param->mlx_ptr);
+	}	
+	mlx_loop(param.mlx_ptr);
 }

@@ -6,13 +6,13 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 18:50:49 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/18 19:14:35 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/22 23:03:36 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
-
+#include <stdio.h>
 int main(int argc, char **argv)
 {
 	int fd;
@@ -30,6 +30,7 @@ int main(int argc, char **argv)
 	}
 	tmp = ft_read_file(fd);
 	ft_render(tmp);
+//	display_lst(tmp);
 	close(fd);
 	return (0);
 }
