@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:03:35 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/22 22:25:45 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/23 17:47:40 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-//здесь z равен одному шагу т.к.  работаем с квадратом
 void ft_iso(int *x, int *y, int z)
 {
 	int x_prev;
@@ -29,15 +28,30 @@ void ft_iso(int *x, int *y, int z)
 	*y = -z + (x_prev + y_prev) * sin(0.523599);
 }
 
+void ft_iso_apply(t_list **lst)
+{
+	t_list *tmp;
+	t_point *point;
 
-void ft_bresenham(t_param *param, t_point p0, t_point p1)
+	tmp = *lst;
+	while(tmp)
+	{
+		point = (t_point*)(tmp->content);
+		ft_iso(&(point->x), &(point->y), point->h); 
+		tmp = tmp->next;
+	}
+}
+
+void ft_bresenham(t_param *param, t_point p0, t_point p1, t_window window)
 {
 	t_point	tmp;
 	t_point step;
 	int x;
 	int y;
 	int error;
-	
+	int count;
+
+	count = 0;
 	x = p0.x;
 	y = p0.y;
 	error = 0;
@@ -52,7 +66,10 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 	tmp.h = tmp.x - tmp.y;
 	while (x != p1.x || y != p1.y)
 	{
-		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x + WIDTH / 2, y + HEIGHT / 2, 0x000FFFFFF);
+	//	printf("iteration: %d", count);
+	//	printf(" x0: %d, y0: %d, x1: %d, y1: %d, x = %d, y = %d\n", p0.x, p0.y, p1.x, p1.y, x, y);
+	//	mlx_pixel_put(param->mlx_ptr, param->win_ptr, x + WIDTH / 2, y + HEIGHT / 2, 0x000FFFFFF);
+		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x + window.l_delta, y + window.h_delta, 0x000FFFFFF);
 		if ((error = tmp.h * 2) > -tmp.y)
 		{
 			tmp.h -= tmp.y;
@@ -60,16 +77,17 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 		}
 		if (error < tmp.x)
 		{
-			tmp.y += tmp.x;
+			tmp.h += tmp.x;
 			y = y + step.y;
 		}
-		printf("x0: %d, y0: %d, x1: %d, y1: %d, x = %d, y = %d\n", p0.x, p0.y, p1.x, p1.y, x, y);
+		count++;
 	}
 }
 
 void ft_render(t_list *map)
 {
 	t_param param;
+	t_window window;
 	t_list *tmp;
 	t_point p00;
 	t_point p01;
@@ -77,6 +95,17 @@ void ft_render(t_list *map)
 	t_list *ttmp;
 	t_point p10;
 	t_point p11;
+
+	//apply iso projection
+	tmp = map;
+	ft_iso_apply(&map);
+
+	//define map size
+	tmp = ft_lstlast(map);
+	window.n_rows = ((t_point*)(tmp->content))->line;
+	window.n_cols = ((t_point*)(tmp->content))->x;
+	window.l_delta = WIDTH / 2 - window.n_cols / 2;
+	window.h_delta = HEIGHT / 2 - window.n_rows / 2;
 
 	param.mlx_ptr = mlx_init();
 	param.win_ptr = mlx_new_window(param.mlx_ptr, WIDTH, HEIGHT, "fdf");
@@ -91,7 +120,7 @@ void ft_render(t_list *map)
 		p01 = *(t_point*)(tmp->next->content);
 		p00 = *(t_point*)(tmp->content);
 		if (p00.line == p01.line)
-			ft_bresenham(&param, p00, p01);
+			ft_bresenham(&param, p00, p01, window);
 	//	if (p00.x == 0)
 	//		ttmp = tmp;
 	//второй указатель стоит пока первый проходит первую линию
@@ -101,8 +130,8 @@ void ft_render(t_list *map)
 			p10 = *(t_point*)(ttmp->content);
 			if(p11.line == p10.line)
 			{
-				ft_bresenham(&param, p11, p01);
-				ft_bresenham(&param, p10, p00);
+				ft_bresenham(&param, p11, p01, window);
+				ft_bresenham(&param, p10, p00, window);
 			}
 			ttmp = ttmp->next;
 		}

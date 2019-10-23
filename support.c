@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 20:57:03 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/22 22:05:18 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/23 16:03:27 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,13 @@ void ft_error(void)
 {
 	ft_putstr("error\n");
 	exit (0);
+}
+
+t_list *ft_lstlast(t_list *begin)
+{
+	t_list *tmp;
+	tmp = begin;
+	while (tmp->next)
+		tmp = tmp->next;
+	return tmp;
 }

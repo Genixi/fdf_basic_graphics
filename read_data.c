@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:07:39 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/22 22:25:48 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/23 17:22:48 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ t_list *ft_get_point(char *value, int j, int i)
 		ft_error();
 	h = ft_atoi(value);
 	point->h = h;
-//	point->x = (x - y)*DELTA;
-//	point->y = (y + x)*DELTA;
+//	point->x = (j - i)*DELTA;
+//	point->y = (j + i)*DELTA;
 	point->x = i*DELTA;
 	point->y = j*DELTA;
 	point->line = j;
 	//применяем изометрию
-	ft_iso(&(point->x), &(point->y), h);
+//	ft_iso(&(point->x), &(point->y), h);
 	if (!(tmp = ft_lstnew(point, sizeof(t_point))))
 		ft_error();
 	free(point);
@@ -67,7 +67,7 @@ void ft_form_list(t_list **begin, char *line, int line_num)
 		}
 		i++;
 	}
-	//здесь надо истить указатели
+	//здесь надо чистить указатели
 }
 
 t_list	*ft_read_file(int fd)
