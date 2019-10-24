@@ -6,7 +6,7 @@
 #    By: equiana <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/18 15:33:07 by equiana           #+#    #+#              #
-#    Updated: 2019/10/18 19:34:54 by equiana          ###   ########.fr        #
+#    Updated: 2019/10/24 12:44:43 by equiana          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = fdf
 LIB_DIR = ./libft/
 LIB = ./libft/libft.a
 
-SRC = main.c read_data.c render.c support.c event_handler.c
+SRC = main.c read_data.c render.c support.c event_handler.c menu.c projection.c
 
 GNL = ./get_next_line/get_next_line.c
 
