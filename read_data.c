@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:07:39 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/24 12:25:04 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/24 20:41:33 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_list *ft_get_point(char *value, int j, int i)
 		ft_error();
 	h = ft_atoi(value);
 	point->h = h;
-	point->x = i*DELTA;
-	point->y = j*DELTA;
+	point->x = i*ZOOM;
+	point->y = j*ZOOM;
 	point->line = j;
 	if (!(tmp = ft_lstnew(point, sizeof(t_point))))
 		ft_error();

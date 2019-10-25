@@ -1,36 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 18:50:49 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/25 10:31:53 by equiana          ###   ########.fr       */
+/*   Created: 2019/09/17 13:54:43 by equiana           #+#    #+#             */
+/*   Updated: 2019/10/16 19:42:16 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
-#include "libft/libft.h"
-#include <stdio.h>
-int main(int argc, char **argv)
-{
-	int fd;
-	t_list *tmp;
-	
-	if (argc != 2)
-	{
-		ft_putstr("invalid arguments\n");
-		return (0);
-	}
-	if ((fd = open(argv[1], O_RDONLY)) == -1)
-	{
-		ft_putstr("cann't open file\n");
-		return (0);
-	}
-	tmp = ft_read_file(fd);
-//	display_lst(tmp);
-	ft_render(tmp);
-	close(fd);
-	return (0);
-}
+#ifndef GET_NEXT_LINE_H
+
+# define GET_NEXT_LINE_H
+# define BUFF_SIZE 4096
+
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+
+int	get_next_line(const int fd, char **line);
+
+#endif

@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/equiana/Desktop/fdf_final/fdf.h
+unistd.h
+-
+fcntl.h
+-
+stdlib.h
+-
+libft/libft.h
+/Users/equiana/Desktop/fdf_final/libft/libft.h
+
+/Users/equiana/Desktop/fdf_final/libft/libft.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+
+/Users/equiana/Desktop/fdf_final/render.c
+fdf.h
+/Users/equiana/Desktop/fdf_final/fdf.h
+libft/libft.h
+/Users/equiana/Desktop/fdf_final/libft/libft.h
+mlx.h
+-
+stdlib.h
+-
+stdio.h
+-
+
