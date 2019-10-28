@@ -1,48 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   support.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 20:57:03 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/26 17:39:54 by equiana          ###   ########.fr       */
+/*   Created: 2019/10/16 18:50:49 by equiana           #+#    #+#             */
+/*   Updated: 2019/10/28 14:58:58 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
 #include <stdio.h>
-void display_lst(t_list *lst)
+int main(int argc, char **argv)
 {
+	int fd;
 	t_list *tmp;
-	int l;
-	int x;
-	int y;
-
-	tmp = lst;
-	while (tmp)
+	
+	if (argc != 2)
 	{
-		x = ((t_point*)(tmp->content))->x;
-		y = ((t_point*)(tmp->content))->y;
-		l = ((t_point*)(tmp->content))->line;
-		printf("h: %f ", ((t_point*)(tmp->content))->h);
-		printf("x: %d, y: %d, line: %d\n", x, y, l);
-		tmp = tmp->next;
+		ft_putstr("invalid arguments\n");
+		return (0);
 	}
-}
-
-void ft_error(void)
-{
-	ft_putstr("error\n");
-	exit (0);
-}
-
-t_list *ft_lstlast(t_list *begin)
-{
-	t_list *tmp;
-	tmp = begin;
-	while (tmp->next)
-		tmp = tmp->next;
-	return tmp;
+	if ((fd = open(argv[1], O_RDONLY)) == -1)
+	{
+		ft_putstr("cann't open file\n");
+		return (0);
+	}
+	tmp = ft_read_file(fd);
+//	printf("initial list:\n");
+//	display_lst(tmp);
+	ft_render(tmp);
+	close(fd);
+	return (0);
 }
