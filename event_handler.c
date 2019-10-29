@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 19:34:57 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/28 16:45:46 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/29 21:58:31 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,12 @@ void ft_arrow_move(int key, t_param *param)
 
 void ft_zoom_move(int key, t_param *param)
 {
-	if (key == ZOOM_IN)
+	if (key == ZOOM_IN || key == MOUSE_UP)
 		param->zoom += 1;
-	else if (key == ZOOM_OUT)
+	else if (key == ZOOM_OUT || key == MOUSE_DOWN)
 		param->zoom -= 1;
 	if (param->zoom < 1)
 		param->zoom = 1;
-	printf("zoom: %d\n", param->zoom);
 	ft_render_map(param->map, param);
 }
 

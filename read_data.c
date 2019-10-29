@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:07:39 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/26 16:52:06 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/29 18:58:46 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ t_list *ft_get_point(char *value, int j, int i)
 	if (!(point = (t_point*)malloc(sizeof(t_point))))
 		ft_error();
 	h = ft_atoi(value);
-	point->h = (double)h;
-	point->x = (double)i*ZOOM;
-	point->y = (double)j*ZOOM;
+	point->h = h;
+	point->x = i*ZOOM;
+	point->y = j*ZOOM;
 	point->line = j;
+//	point->color = 0x000FFFFFF;
+	point->color = get_default_color(COLOR_MIN, COLOR_MAX, h);	
 	if (!(tmp = ft_lstnew(point, sizeof(t_point))))
 		ft_error();
 	free(point);

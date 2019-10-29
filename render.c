@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:03:35 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/28 16:46:06 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/29 21:43:45 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 {
 	t_step	tmp;
 	t_step step;
+	t_point color_step;
 	int x;
 	int y;
 	int error;
@@ -69,6 +70,7 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 	p0 = ft_proj_apply(p0, param);
 	p1 = ft_proj_apply(p1, param);
 
+	color_step = p0;
 	x = p0.x;
 	y = p0.y;
 	error = 0;
@@ -88,16 +90,19 @@ void ft_bresenham(t_param *param, t_point p0, t_point p1)
 //		printf(" print x: %d, y: %d \n", x, y);
 //		if (x > 60 || y > 60)
 //		   exit (0);	
-		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x, y, 0x000FFFFFF);
+//		printf("point color: %d\n", get_color(color_step, p0, p1, tmp));
+		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x, y, get_color(color_step, p0, p1, tmp));
 		if ((error = tmp.h * 2) > -tmp.y)
 		{
 			tmp.h -= tmp.y;
 			x = x + step.x;
+			color_step.x = x;
 		}
 		if (error < tmp.x)
 		{
 			tmp.h += tmp.x;
 			y = y + step.y;
+			color_step.y = y;
 		}
 	}
 }
@@ -121,8 +126,17 @@ void ft_render(t_list *map)
 	param.x_angle = 0;
 	param.y_angle = 0;
 	param.z_angle = 0;
+	param.h_min = COLOR_MIN;
+	param.h_max = COLOR_MAX;
+	param.mouse = 0;
+	param.x_mouse = 0;
+	param.y_mouse = 0;
 	param.map = map;
-	mlx_key_hook(param.win_ptr, ft_deal_key, (void *)(&param)); 
+//	mlx_key_hook(param.win_ptr, ft_deal_key, (void *)(&param)); 
+	mlx_hook(param.win_ptr, 2, 0, ft_deal_key, (void*)(&param));
+	mlx_hook(param.win_ptr, 4, 0, ft_deal_mouse, (void*)(&param)); 
+	mlx_hook(param.win_ptr, 5, 0, ft_mouse_click, (void*)(&param));
+	mlx_hook(param.win_ptr, 6, 0, ft_mouse_move, (void*)(&param));
 	ft_render_map(map, &param);
 	
 	mlx_loop(param.mlx_ptr);
