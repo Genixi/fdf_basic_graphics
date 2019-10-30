@@ -6,15 +6,14 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 13:25:02 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/29 21:36:08 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/30 23:22:34 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <mlx.h>
-#include <stdlib.h>
-#include <stdio.h>
-int ft_deal_mouse(int key, int x, int y, void *param)
+
+int	ft_deal_mouse(int key, int x, int y, void *param)
 {
 	t_param *tmp;
 
@@ -28,7 +27,7 @@ int ft_deal_mouse(int key, int x, int y, void *param)
 	return (0);
 }
 
-int	ft_mouse_click(int key, int x, int y, void*param)
+int	ft_mouse_click(int key, int x, int y, void *param)
 {
 	t_param *tmp;
 
@@ -40,11 +39,11 @@ int	ft_mouse_click(int key, int x, int y, void*param)
 	return (0);
 }
 
-int ft_mouse_move(int x, int y, void*param)
+int	ft_mouse_move(int x, int y, void *param)
 {
-	int x_prev;
-	int y_prev;
-	t_param *tmp;
+	int		x_prev;
+	int		y_prev;
+	t_param	*tmp;
 
 	tmp = (t_param*)param;
 	x_prev = tmp->x_mouse;
@@ -57,5 +56,5 @@ int ft_mouse_move(int x, int y, void*param)
 		tmp->x_angle += (y - y_prev) * 0.002;
 		ft_render_map(tmp->map, tmp);
 	}
-	return (0);	
+	return (0);
 }

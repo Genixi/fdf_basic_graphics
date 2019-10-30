@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:20:07 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/29 21:58:23 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/30 23:47:49 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 
 # define COLOR_MAX		2147483647
 # define COLOR_MIN		-2147483648
+
+/*
+ * reccomend ZOOM = 10 for small and medium figures and ZOOM = 1 for large maps
+ */
 
 # define WIDTH			1420
 # define HEIGHT 		780
@@ -47,8 +51,8 @@
 # define INCL_LESS		25
 # define INCL_MORE		29
 
-# define ISO			34
-# define PAR			35
+# define ISO			18
+# define PAR			19
 
 # define MOUSE_LEFT		1
 # define MOUSE_UP		4
@@ -116,12 +120,12 @@ int				ft_deal_key(int key, void *param);
 int				ft_deal_mouse(int key, int x, int y, void *param);
 int				ft_mouse_click(int key, int x, int y, void *param);
 int				ft_mouse_move(int x, int y, void*param);
-int				get_default_color(int min, int max, int z);
+int				set_color(int h);
 int				get_light(int start, int end, double mix);
 int				get_color(t_point a, t_point p0, t_point p1, t_step delta);
 double			get_mix(int start, int end, int current);
 void			ft_menu(void *mlx_ptr, void *win_ptr);
-void			ft_error(void);
+void			ft_error(int type);
 void			ft_iso_apply(int *x, int *y, int z);
 void			ft_rotate(int *x, int *y, int *z, t_param *param);
 void			ft_arrow_move(int key, t_param *param);

@@ -6,18 +6,18 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 18:50:49 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/28 14:58:58 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/30 23:10:55 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
-#include <stdio.h>
-int main(int argc, char **argv)
+
+int	main(int argc, char **argv)
 {
-	int fd;
-	t_list *tmp;
-	
+	int		fd;
+	t_list	*tmp;
+
 	if (argc != 2)
 	{
 		ft_putstr("invalid arguments\n");
@@ -29,8 +29,6 @@ int main(int argc, char **argv)
 		return (0);
 	}
 	tmp = ft_read_file(fd);
-//	printf("initial list:\n");
-//	display_lst(tmp);
 	ft_render(tmp);
 	close(fd);
 	return (0);
