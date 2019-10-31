@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:03:35 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/31 00:12:27 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/31 17:19:45 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,98 +15,81 @@
 #include <mlx.h>
 #include <math.h>
 
-int		set_color(int h)
+void	ft_render_map(t_list *m, t_param *p)
 {
-	if (h < 0)
-		return (STEELBLUE);
-	else if (h < 10)
-		return (TAN);
-	else if (h < 25)
-		return (SANDYBROWN);
-	else if (h < 50)
-		return (SIENNA);
-	else
-		return (BROWN);
-}
-
-void	ft_render_map(t_list *map, t_param *param)
-{
-	t_list	*tmp;
 	t_point	p01;
-	t_list	*ttmp;
+	t_list	*t;
 	t_point	p11;
 
-	if (param->mlx_ptr && param->win_ptr)
-		mlx_clear_window((void*)(param->mlx_ptr), (void*)(param->win_ptr));
-	ft_menu(param->mlx_ptr, param->win_ptr);
-	tmp = map;
-	ttmp = tmp;
-	while (tmp && tmp->next)
+	if (p->mlx_ptr && p->win_ptr)
+		mlx_clear_window((void*)(p->mlx_ptr), (void*)(p->win_ptr));
+	ft_menu(p->mlx_ptr, p->win_ptr);
+	t = m;
+	while (m && m->next)
 	{
-		p01 = *(t_point*)(tmp->next->content);
-		if ((*(t_point*)(tmp->content)).line == p01.line)
-			ft_bresenham(param, (*(t_point*)(tmp->content)), p01);
-		if (ttmp->next && (*(t_point*)(tmp->content)).line != 0)
+		p01 = *(t_point*)(m->next->content);
+		if ((*(t_point*)(m->content)).line == p01.line)
+			ft_brnhm(p, *(t_point*)(m->content), p01);
+		if (t->next && (*(t_point*)(m->content)).line != 0)
 		{
-			p11 = *(t_point*)(ttmp->next->content);
-			if((*(t_point*)(ttmp->content)).line == p11.line)
-			{				
-				ft_bresenham(param, p11, p01);
-				ft_bresenham(param, (*(t_point*)(ttmp->content)), (*(t_point*)(tmp->content)));
+			p11 = *(t_point*)(t->next->content);
+			if (p11.line == (*(t_point*)(t->content)).line)
+			{
+				ft_brnhm(p, p11, p01);
+				ft_brnhm(p, *(t_point*)(t->content), *(t_point*)(m->content));
 			}
-			ttmp = ttmp->next;
+			t = t->next;
 		}
-		tmp = tmp->next;
-	}	
+		m = m->next;
+	}
 }
 
-void ft_bresenham(t_param *param, t_point p0, t_point p1)
+void	ft_brnhm_init(t_step *t, t_step *s, t_point p0, t_point p1)
 {
-	t_step	tmp;
-	t_step step;
-	t_point color_step;
-	int x;
-	int y;
-	int error;
+	s->x = p0.x;
+	s->y = p0.y;
+	s->x_step = ((p0.x < p1.x) ? 1 : -1);
+	s->y_step = ((p0.y < p1.y) ? 1 : -1);
+	t->x = abs(p1.x - p0.x);
+	t->y = abs(p1.y - p0.y);
+	t->h = t->x - t->y;
+}
 
-	p0 = ft_proj_apply(p0, param);
-	p1 = ft_proj_apply(p1, param);
+void	ft_brnhm(t_param *p, t_point p0, t_point p1)
+{
+	t_step	t;
+	t_step	s;
+	t_point	c;
+	int		error;
 
-	color_step = p0;
-	x = p0.x;
-	y = p0.y;
-	error = 0;
-	step.x = ((p0.x < p1.x) ? 1 : -1);
-	step.y = ((p0.y < p1.y) ? 1 : -1);
-	tmp.x = abs(p1.x - p0.x);
-	tmp.y = abs(p1.y- p0.y);
-	tmp.h = tmp.x - tmp.y;
-	while (x != p1.x || y != p1.y)
+	p0 = ft_proj_apply(p0, p);
+	p1 = ft_proj_apply(p1, p);
+	c = p0;
+	ft_brnhm_init(&t, &s, p0, p1);
+	while (s.x != p1.x || s.y != p1.y)
 	{
-		mlx_pixel_put(param->mlx_ptr, param->win_ptr, x, y, get_color(color_step, p0, p1, tmp));
-		if ((error = tmp.h * 2) > -tmp.y)
+		mlx_pixel_put(p->mlx_ptr, p->win_ptr, s.x, s.y, get_clr(c, p0, p1, t));
+		if ((error = t.h * 2) > -t.y)
 		{
-			tmp.h -= tmp.y;
-			x = x + step.x;
-			color_step.x = x;
+			t.h -= t.y;
+			s.x = s.x + s.x_step;
+			c.x = s.x;
 		}
-		if (error < tmp.x)
+		if (error < t.x)
 		{
-			tmp.h += tmp.x;
-			y = y + step.y;
-			color_step.y = y;
+			t.h += t.x;
+			s.y = s.y + s.y_step;
+			c.y = s.y;
 		}
 	}
 }
 
-void ft_render(t_list *map)
+void	ft_render(t_list *map, char *name)
 {
-	t_param param;
-	t_list *tmp;
+	t_param	param;
 
-	tmp = map;
 	param.mlx_ptr = mlx_init();
-	param.win_ptr = mlx_new_window(param.mlx_ptr, WIDTH, HEIGHT, "fdf");
+	param.win_ptr = mlx_new_window(param.mlx_ptr, WIDTH, HEIGHT, name);
 	param.x_delta = 0;
 	param.y_delta = 0;
 	param.zoom = 1;
@@ -122,7 +105,7 @@ void ft_render(t_list *map)
 	param.y_mouse = 0;
 	param.map = map;
 	mlx_hook(param.win_ptr, 2, 0, ft_deal_key, (void*)(&param));
-	mlx_hook(param.win_ptr, 4, 0, ft_deal_mouse, (void*)(&param)); 
+	mlx_hook(param.win_ptr, 4, 0, ft_deal_mouse, (void*)(&param));
 	mlx_hook(param.win_ptr, 5, 0, ft_mouse_click, (void*)(&param));
 	mlx_hook(param.win_ptr, 6, 0, ft_mouse_move, (void*)(&param));
 	ft_render_map(map, &param);

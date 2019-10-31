@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 19:34:57 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/30 23:08:26 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/31 17:28:59 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		ft_deal_key(int key, void *param)
 	else if (key == ISO || key == PAR)
 		ft_project_move(key, tmp);
 	else if (key == ROTATE_X1 || key == ROTATE_X2 || key == ROTATE_Y1
-					|| key == ROTATE_Y2 || key == ROTATE_Z1 || key == ROTATE_Z2)
+			|| key == ROTATE_Y2 || key == ROTATE_Z1 || key == ROTATE_Z2)
 		ft_rotate_move(key, tmp);
 	return (0);
 }

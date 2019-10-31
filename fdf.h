@@ -6,7 +6,7 @@
 /*   By: equiana <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:20:07 by equiana           #+#    #+#             */
-/*   Updated: 2019/10/30 23:47:49 by equiana          ###   ########.fr       */
+/*   Updated: 2019/10/31 18:27:07 by equiana          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,10 @@
 # define COLOR_MAX		2147483647
 # define COLOR_MIN		-2147483648
 
-/*
- * reccomend ZOOM = 10 for small and medium figures and ZOOM = 1 for large maps
- */
-
 # define WIDTH			1420
 # define HEIGHT 		780
 # define M_WIDTH		250
-# define ZOOM			10
+# define ZOOM			1
 
 # define ESC			53
 
@@ -48,9 +44,6 @@
 # define ZOOM_IN		24
 # define ZOOM_OUT		27
 
-# define INCL_LESS		25
-# define INCL_MORE		29
-
 # define ISO			18
 # define PAR			19
 
@@ -67,9 +60,9 @@
 # define BROWN			0xA52A2A
 # define WHITE			0xFFFFFF
 
-/* 
-* point description
- */
+/*
+** point description
+*/
 
 typedef struct	s_point
 {
@@ -77,23 +70,27 @@ typedef struct	s_point
 	int			x;
 	int			y;
 	int			line;
-	int			color;	
+	int			color;
 }				t_point;
 
 typedef struct	s_step
 {
 	int			x;
 	int			y;
+	int			x_tmp;
+	int			y_tmp;
 	int			h;
+	int			x_step;
+	int			y_step;
 }				t_step;
 
 /*
- * all parameters to draw and manipulate picture
- * x_delta - offset initial picture along x asix in case ARROW_LEFT/RIGHT push
- * y_delta - offet initial picture along y asix in case arrow ARROW_UP/DOWN push
- * map - point to the data list
- * proj - projection status, 0 - iso, 1 - parallel  
- */
+** all parameters to draw and manipulate picture
+** x_delta - offset initial picture along x asix in case ARROW_LEFT/RIGHT push
+** y_delta - offet initial picture along y asix in case arrow ARROW_UP/DOWN push
+** map - point to the data structure
+** proj - projection status, 0 - iso, 1 - parallel
+*/
 
 typedef struct	s_param
 {
@@ -122,7 +119,7 @@ int				ft_mouse_click(int key, int x, int y, void *param);
 int				ft_mouse_move(int x, int y, void*param);
 int				set_color(int h);
 int				get_light(int start, int end, double mix);
-int				get_color(t_point a, t_point p0, t_point p1, t_step delta);
+int				get_clr(t_point a, t_point p0, t_point p1, t_step delta);
 double			get_mix(int start, int end, int current);
 void			ft_menu(void *mlx_ptr, void *win_ptr);
 void			ft_error(int type);
@@ -133,10 +130,10 @@ void			ft_zoom_move(int key, t_param *param);
 void			ft_rotate_move(int key, t_param *param);
 void			ft_incline_move(int key, t_param *param);
 void			ft_project_move(int key, t_param *param);
-void			ft_render(t_list *map);
-void			ft_bresenham(t_param *prm, t_point p0, t_point p1);
+void			ft_render(t_list *map, char *name);
+void			ft_brnhm(t_param *prm, t_point p0, t_point p1);
+void			ft_brnhm_init(t_step *t, t_step *s, t_point p0, t_point p1);
 void			ft_render_map(t_list *map, t_param *param);
-void			display_lst(t_list *lst);
 t_point			ft_proj_apply(t_point point, t_param *param);
 t_list			*ft_lstlast(t_list *begin);
 t_list			*ft_read_file(int fd);
