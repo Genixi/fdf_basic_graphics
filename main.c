@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_putstr("usage: ./fillit input_file\n");
+		ft_putstr("usage: ./fdf input_file\n");
 		return (0);
 	}
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
